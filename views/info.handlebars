@@ -1,0 +1,81 @@
+<!-- 证件信息页 -->
+<div class="container">
+<div class="row">
+	<div class="col-lg-2">
+    {{>list-group}}
+	</div>
+	<div class="col-lg-10">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">证件信息</h4>
+      </div>
+      <div class="panel-body">
+        {{#if info}}
+        <div  class="col-lg-6">
+          <table class="table table-bordered">
+            <tbody>
+              <tr>
+                <td>证件号</td>
+                <td>{{info.number}}</td>
+              </tr>
+              <tr>
+                <td>姓名</td>
+                <td>{{info.name}}</td>
+              </tr>
+              <tr>
+                <td>性别</td>
+                <td>{{info.sex}}</td>
+              </tr>
+              <tr>
+                <td>身份证号</td>
+                <td>{{info.creditNum}}</td>
+              </tr>
+              <tr>
+                <td>手机</td>
+                <td>{{info.phone}}</td>
+              </tr>
+              <tr>
+                <td>Email</td>
+                <td>{{info.email}}</td>
+              </tr>
+            </tbody>      
+          </table>
+        </div>
+        <div class="col-lg-6">
+          <table class="table table-bordered">
+            <tbody>
+              <tr>
+                <td>读者类型</td>
+                <td>{{info.type}}</td>
+              </tr>
+              <tr>
+                <td>职业</td>
+                <td>{{info.job}}</td>
+              </tr>
+              <tr>
+                <td>最大可借图书</td>
+                <td>{{info.maxBorrow}}</td>
+              </tr>
+              <tr>
+                <td>最大预约图书</td>
+                <td>{{info.maxOrder}}</td>
+              </tr>
+              <tr>
+                <td>违章次数</td>
+                <td>{{info.breakRule}}</td>
+              </tr>
+            </tbody>      
+          </table>
+        </div>
+        {{else}}
+          
+        {{/if}}
+      </div>
+    </div>
+	</div>
+</div>
+<!-- footer -->
+<div class="footer">
+    <p>© Company 2016</p>
+</div>
+</div>

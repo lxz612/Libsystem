@@ -1,0 +1,62 @@
+<!-- 搜索结果页 -->
+<div class="container">
+<!-- 搜索结果页 -->
+<div class="panel panel-default">
+<div class="panel-heading">
+    <h4 class="panel-title">检索结果</h4>
+  </div>
+  <div class="panel-body">
+  	<div class="row search-box">
+      <div class="col-lg-1 col-lg-offset-3">
+        <div id="dropdown1" class="dropdown">
+          <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+            <span class="placeholder">图书名</span>
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            <li value="0"><a>图书名</a></li>
+            <li value="1"><a>责任者</a></li>
+            <li value="2"><a>主题者</a></li>
+            <li value="3"><a>索书号</a></li>
+            <li value="4"><a>出版社</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="input-group">
+          <input id="content" type="text" class="form-control">
+          <span class="input-group-btn">
+            <button id="submit" class="btn btn-default" type="button">重新检索</button>
+          </span>
+        </div><!-- /input-group -->
+      </div><!-- /.col-lg-6 -->
+  	</div><!-- /.row -->
+    <div class="row search-result">
+      <div class="col-lg-6 col-lg-offset-3">
+        <ul class="list-group">
+          {{#each books}}
+            <li class="list-group-item">
+              <h6><a href="/books?marc_no={{marc_no}}"><b>1.<span style="color:#F00;">{{title}}&nbsp&nbsp</span></b></a>{{callnumber}}
+              <span class="pull-right">{{type}}</span>
+              </h6>
+              <p>
+                {{author}}<br />
+                {{press}}
+                <!-- <span class="pull-right"><a href="/books?marc_no={{marc_no}}">借阅</a></span> -->
+              </p>
+            </li>
+          {{/each}}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+<!-- footer -->
+<div class="footer">
+    <p>© Company 2016</p>
+</div>
+</div>
+
+  

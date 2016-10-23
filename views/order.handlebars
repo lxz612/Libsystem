@@ -1,0 +1,41 @@
+<!-- body -->
+<div class='container'>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">预约</h4>
+    </div>
+    <div class="panel-body">
+      {{#if book}}
+      <div class="col-lg-4 col-lg-offset-4">
+        <h4 class="text-center">确认图书基本信息：</h4>
+        <table class="table table-bordered">
+          <tbody>
+            <tr>
+              <td width="20%">索书号</td>
+              <td id="barcode">{{book.callnumber}}</td>
+            </tr>
+            <tr>
+              <td width="20%">书名</td>
+              <td>{{book.title}}</td>
+            </tr>
+            <tr>
+              <td width="20%">责任者</td>
+              <td>{{book.author}}</td>
+            </tr>
+            <tr>
+              <td width="20%">出版社</td>
+              <td>{{book.press}}</td>
+            </tr>
+            <input id="marc" type="hidden" value="{{book.marc_no}}">
+          </tbody>
+        </table>
+        <Button id="order" class="btn btn-primary">预约</Button>
+      </div>
+      {{/if}}
+    </div>
+  </div>
+  <!-- footer -->
+  <div class="footer">
+      <p>© Company 2016</p>
+  </div>
+</div>

@@ -1,0 +1,103 @@
+<!-- body -->
+<div class='container'>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">馆藏书目检索</h4>
+    </div>
+    <div class="panel-body">
+      <div class="row search-box">
+        <div class="col-lg-1 col-lg-offset-3">
+          <div id="dropdown1" class="dropdown">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+              <span class="placeholder">图书名</span>
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+              <li value="0"><a>图书名</a></li>
+              <li value="1"><a>责任者</a></li>
+              <li value="2"><a>主题者</a></li>
+              <li value="3"><a>索书号</a></li>
+              <li value="4"><a>出版社</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <div class="input-group">
+            <input id="content" type="text" class="form-control">
+            <span class="input-group-btn">
+              <button id="submit" class="btn btn-default" type="button">GO！</button>
+            </span>
+          </div><!-- /input-group -->
+        </div><!-- /.col-lg-6 -->
+      </div><!-- /.row -->
+      <div class="row search-box-2">
+        <div id="radioselect" class='col-lg-6 col-lg-offset-3 '>
+          <input type='radio' name="kind" id="1" value="all" checked="checked"/><label for="1">所有书刊</label>
+          <input type='radio' name="kind" id="2" value="chinese"/><label for="2">中文图书</label>
+          <input type='radio' name="kind" id="3" value="eng"/><label for="3">西文图书</label>
+          <input type='radio' name="kind" id="4" value="chinmaga"/><label for="4">中文期刊</label>
+          <input type='radio' name="kind" id="5" value="engmaga"/><label for="5">西文期刊</label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">热门检索</h4>
+        </div>
+        <!-- <div class="panel-body"> -->
+          <div class="list-group">
+            <a href="#" class="list-group-item">
+              <span class="glyphicon glyphicon-chevron-right"></span>电路分析
+            </a>
+            <a href="#" class="list-group-item">
+              <span class="glyphicon glyphicon-chevron-right"></span>Java
+            </a>
+            <a href="#" class="list-group-item">
+              <span class="glyphicon glyphicon-chevron-right"></span>三体
+            </a>
+            <a href="#" class="list-group-item">
+              <span class="glyphicon glyphicon-chevron-right"></span>ppt
+            </a>
+            <a href="#" class="list-group-item">
+              <span class="glyphicon glyphicon-chevron-right"></span>从你的全世界路过 
+            </a>
+          <!-- </div> -->
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">热门借阅</h4>
+        </div>
+        <!-- <div class="panel-body"> -->
+          <div class="list-group">
+            <a href="#" class="list-group-item">
+              <span class="glyphicon glyphicon-play"></span>鸟哥的Linux私房菜
+            </a>
+            <a href="#" class="list-group-item">
+              <span class="glyphicon glyphicon-play"></span>红楼梦辞典
+            </a>
+            <a href="#" class="list-group-item">
+              <span class="glyphicon glyphicon-play"></span>平凡的世界.1-3
+            </a>
+            <a href="#" class="list-group-item">
+              <span class="glyphicon glyphicon-play"></span>围城
+            </a>
+            <a href="#" class="list-group-item">
+              <span class="glyphicon glyphicon-play"></span>狼图腾
+            </a>
+          </div>
+        <!-- </div> -->
+      </div>
+    </div>
+  </div>
+
+  <!-- footer -->
+  <div class="footer">
+      <p>© Company 2016</p>
+  </div>
+</div>

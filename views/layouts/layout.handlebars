@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{{title}}</title>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+	<!-- 新 Bootstrap 核心 CSS 文件 -->
+	<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+	<style type="text/css">
+		.booklist dt{
+			float: left;
+			width: 10%;
+			/*text-align: right;*/
+		}
+		.booklist dd{
+			width: 90%;
+			float: right;
+		}
+	</style>
+</head>
+<body>
+  <!-- 公共头部 -->
+	<nav class="navbar navbar-default navbar-static-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="/search">图书流通管理系统</a>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+				{{#each arr}}
+				<ul class="nav navbar-nav">
+					<li class="{{sch}}"><a href="/search">书目检索</a></li>
+					<!-- <li class=""><a href="/search">借还书</a></li> -->
+					<li class="{{lib}}"><a href="/mylib/myborrow">我的图书馆</a></li>
+					<li class="{{abt}}"><a href="/about">关于</a></li>
+				</ul>
+				{{/each}}
+				<ul class="nav navbar-nav navbar-right">
+					{{#if user}}
+					<li><a href="/mylib/myborrow">{{user.name}}</a></li>
+					<li><a href="/loginOut">退出</a></li>
+					{{else}}
+					<li class="{{log}}"><a href="/login">登录</a></li>
+					<li><a href="">后台管理</a></li>
+					{{/if}}
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+  <!-- 内容部分 -->
+  {{{body}}}
+
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<!-- <script src="http://v3.bootcss.com/assets/js/docs.min.js"></script> -->
+	<script type="text/javascript">
+		/*下拉框选择*/
+	  function CustomDropDown(element){
+	    this.dropdown=element;
+	    this.placeholder=this.dropdown.find(".placeholder");
+	    this.options=this.dropdown.find("ul.dropdown-menu > li");
+	    this.val='0';
+	    this.index=-1;//默认为-1;
+	    this.initEvents();//初始化事件
+	  }
+	  //原型方法
+	  CustomDropDown.prototype = {
+	    initEvents: function() {
+	      var obj = this;
+	      //这个方法可以不写，因为点击事件被Bootstrap本身就捕获了，显示下面下拉列表
+	      // obj.dropdown.on("click", function(event) {
+	      //   $(this).toggleClass("active");
+	      // });
+
+	      //点击下拉列表的选项
+	      obj.options.on("click", function() {
+	        var opt = $(this);
+	        obj.text = opt.find("a").text();
+	        obj.val = opt.attr("value");
+	        obj.index = opt.index();
+	        obj.placeholder.text(obj.text);
+	        // console.log(obj.getValue());
+	      });
+	    },
+	    getText: function() {
+	      return this.text;
+	    },
+	    getValue: function() {
+	      return this.val;
+	    },
+	    getIndex: function() {
+	      return this.index;
+	    }
+	  };
+	  
+
+	  /*单选框选择*/
+	  function RadioSelect(element){
+	  	this.obj=element;
+
+	  	this.options=this.obj.find('input');
+
+	  	this.val='all';
+	  	this.initEvents();
+	  }
+	  RadioSelect.prototype={
+	  	initEvents:function(){
+	  		var obj=this;
+	  		obj.options.on('change',function(){
+	  			var opt=$(this);
+	  			obj.val = opt.attr("value");
+	  			// console.log(obj.getValue());
+	  		});
+	  	},
+	  	getValue:function(){
+	  		return this.val;
+	  	}
+	  };
+
+	  $(document).ready(function() {
+	    var mydropdown = new CustomDropDown($("#dropdown1"));
+	    var myradio=new RadioSelect($("#radioselect"));
+
+	    //搜索按钮点击
+	    $('#submit').click(function() {
+	    	var url='/search';
+	    	var searchType=mydropdown.getValue();
+	    	var bookType=myradio.getValue();
+	    	var content=$('#content').val();
+	    	if (content==''){
+	    		alert('请输入搜索内容...');
+	    	}else{
+	    		$.StandardPost(url,{
+	    			searchType:searchType,
+	    			bookType:bookType,
+	    			content:content
+	    		});
+	    	}
+	    });
+	  });
+
+	  //借书请求
+	  $(document).ready(function(){
+			$('#borrow').click(function(){
+				var barcode=$("#barcode").text();
+				if(barcode==""){
+					barcode=$("#barcode").val();
+				}
+				// if (barcode="") {}
+				var url="/borrow";
+				$.StandardPost(url,{
+					barcode:barcode
+				});
+			});
+	  });
+
+	  //预约请求
+	  $(document).ready(function(){
+	  	$('#order').click(function(){
+	  		var marcno=$('#marc').val();
+	  		alert(marcno);
+	  		var url="/order";
+	  		$.StandardPost(url,{
+	  			marc_no:marcno
+	  		});
+	  	});
+	  });
+ 
+	  //构建post请求
+	  $.extend({
+	  	StandardPost:function(url,args){
+	  		var form=$("<form method='post'></form>");
+	  		var input;
+	  		form.attr({"action":url});
+	  		$.each(args,function(key,value){
+	  			input = $("<input type='hidden'>");
+	            input.attr({"name":key});
+	            input.val(value);
+	            form.append(input);
+	  		});
+	  		form.appendTo(document.body);
+        	form.submit();
+        	document.body.removeChild(form[0]);
+	  	}
+	  });
+	</script>
+</body>
+</html>

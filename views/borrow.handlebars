@@ -1,0 +1,49 @@
+<!-- body -->
+<div class='container'>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">借书</h4>
+    </div>
+    <div class="panel-body">
+      {{#if book}}
+      <div class="col-lg-4 col-lg-offset-4">
+        <h4 class="text-center">确认图书基本信息：</h4>
+        <table class="table table-bordered">
+          <tbody>
+            <tr>
+              <td width="20%">条码号</td>
+              <td id="barcode">{{book.barcode}}</td>
+            </tr>
+            <tr>
+              <td width="20%">书名</td>
+              <td>{{book.title}}</td>
+            </tr>
+            <tr>
+              <td width="20%">责任者</td>
+              <td>{{book.author}}</td>
+            </tr>
+            <tr>
+              <td width="20%">出版社</td>
+              <td>{{book.press}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <Button id="borrow" class="btn btn-primary">借阅</Button>
+      </div>
+      {{else}}
+      <div class="col-lg-4 col-lg-offset-4">
+        <div class="form-group">
+          <label for="barcode">请输入条码号：</label>
+          <input type="text" class="form-control" id="barcode" placeholder="比如:70468842">
+        </div>
+        <button id="borrow" class="btn btn-primary">借阅</button>
+      </div>
+      {{/if}}
+      
+    </div>
+  </div>
+  <!-- footer -->
+  <div class="footer">
+      <p>© Company 2016</p>
+  </div>
+</div>

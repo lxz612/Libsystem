@@ -1,0 +1,49 @@
+<div class="container">
+	<div class="row">
+		<div class="col-lg-2">
+      {{>list-group}}
+		</div>
+		<div class="col-lg-10">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">当前借阅</h4>
+        </div>
+        <div class="panel-body">
+  				<!-- <h2 class="sub-header">Section title</h2> -->
+  				<div class="table-responsive">
+  					<table class="table table-striped">
+  						<thead>
+  							<tr>
+  								<th>条码号</th>
+                  <th>题名</th>
+  								<th>责任者</th>
+  								<th>借阅日期</th>
+  								<th>应还日期</th>
+  								<th>馆藏地</th>
+                  <th>续借</th>
+  							</tr>
+  						</thead>
+  						<tbody>
+                {{#each borrows}}
+  							<tr>
+  								<td>{{barcode}}</td>
+  								<td>{{title}}</td>
+                  <td>{{author}}</td>
+  								<td>{{outdate}}</td>
+  								<td>{{indate}}</td>
+  								<td>{{address}}</td>
+                  <td><a href="#">续借</a></td>
+  							</tr>
+                {{/each}}
+  						</tbody>
+  					</table>
+  				</div>
+        </div>
+      </div>
+		</div>
+	</div>
+  <!-- footer -->
+  <div class="footer">
+      <p>© Company 2016</p>
+  </div>
+</div>
