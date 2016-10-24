@@ -7,7 +7,7 @@ function Borrow(number, barcode) {
 
 module.exports = Borrow;
 
-//ä¿å­˜å€Ÿä¹¦è®°å½•
+//±£´æ½èÊé¼ÇÂ¼
 Borrow.save = function(number, barcode, callback) {
 	db.getConnection(function(err,connection){
 		if(err){
@@ -18,7 +18,7 @@ Borrow.save = function(number, barcode, callback) {
 				callback(err);
 			}
 
-			//æ›´æ”¹bookæ•°æ®ä¸­ä¹¦ç±çŠ¶æ€ 0--å¯å€Ÿ 1--å€Ÿå‡º 2--é—å¤±
+			//¸ü¸ÄbookÊı¾İÖĞÊé¼®×´Ì¬ 0--¿É½è 1--½è³ö 2--ÒÅÊ§
 			var updatesql = "update book SET state='1' WHERE barcode='" + barcode + "';";
 			connection.query(updatesql,[],function(err,rows,fields){
 				if(err){
@@ -28,8 +28,8 @@ Borrow.save = function(number, barcode, callback) {
 				}
 
 				var date = new Date().Format("yyyy-MM-dd hh:mm:ss");
-				var state = 1; // 0--å·²è¿˜ 1--æœªè¿˜ 2--é—å¤±
-				//å†™å…¥å€Ÿé˜…æ•°æ®åº“ä¸­
+				var state = 1; // 0--ÒÑ»¹ 1--Î´»¹ 2--ÒÅÊ§
+				//Ğ´Èë½èÔÄÊı¾İ¿âÖĞ
 				var sql = "insert into borrow (number,barcode,outdate,state) values ('" + number + "','" + barcode + "','" + date + "','" + state + "');";
 				connection.query(sql,[],function(err,rows,fields) {
 					if(err){
@@ -61,32 +61,88 @@ Borrow.findoutdate=function(barcode,callback){
 	});
 }
 
-//æŸ¥æ‰¾å½“å‰å€Ÿé˜…çš„ä¿¡æ¯
+//²éÕÒµ±Ç°½èÔÄµÄĞÅÏ¢
 Borrow.findNowBorrow=function(number,callback){
-	var sql="select bk.barcode,bk.title,bk.author,bw.outdate,bk.address from borrow bw,book bk where bw.barcode=bk.barcode AND bw.state='1';"
+	var sql="select bk.barcode,bk.title,bk.author,bw.outdate,bw.frequency,bk.address from borrow bw,book bk where bw.barcode=bk.barcode AND bw.state='1' AND number='"+number+"';"
 	db.exec(sql,'',function(err,rows){
 		callback(err,rows);
 	}); 
 }
 
-//å†å²å€Ÿé˜…
+//Ğø½è²Ù×÷
+Borrow.renew=function(number,barcode,callback){
+	db.getConnection(function(err,connection){
+		if(err){
+			throw err;
+		}
+		var sql;
+		connection.beginTransaction(function(err){
+			if(err){
+				return callback(err);
+			}
+			sql="select frequency from borrow where number='"+number+"' and barcode='"+barcode+"';";
+			connection.query(sql,[],function(err,rows){
+				if(err){
+					connection.rollback(function(){
+						callback(err);
+					});
+				}
+
+				var frequency;
+				if(rows){
+					frequency=rows[0].frequency;
+				}
+
+				console.log('frequency',frequency);
+
+				if(frequency==null){
+					frequency=1;
+				}else if(frequency=='1'){
+					frequency=2;
+				}else{
+					return callback('no pass 2')
+				}
+
+				var sql="update borrow set frequency='"+frequency+"' where number='"+number+"' and barcode='"+barcode+"'";
+				connection.query(sql,[],function(err,rows){
+					if(err){
+						connection.rollback(function(){
+							callback(err);
+						})
+					}
+
+					connection.commit(function(err){
+						if(err){
+							return connection.rollback(function(){
+								callback(err);
+							});
+						}
+						callback();
+					});	
+				});
+			});
+		});
+	});
+};
+
+//ÀúÊ·½èÔÄ
 Borrow.findHistory=function(number,callback){
-	var sql="select bk.barcode,bk.title,bk.author,bw.outdate,bw.indate,bk.address from borrow bw,book bk where bw.barcode=bk.barcode AND bw.state='0';"
+	var sql="select bk.barcode,bk.title,bk.author,bw.outdate,bw.indate,bk.address from borrow bw,book bk where bw.barcode=bk.barcode AND bw.state='0' AND number='"+number+"';"
 	db.exec(sql,'',function(err,rows){
 		callback(err,rows);
 	});
-}
+};
 
-//æ—¥æœŸæ ¼å¼åŒ–å‡½æ•°
+//ÈÕÆÚ¸ñÊ½»¯º¯Êı
 Date.prototype.Format = function(fmt) {
 	var o = {
-		"M+": this.getMonth() + 1, //æœˆä»½ 
-		"d+": this.getDate(), //æ—¥ 
-		"h+": this.getHours(), //å°æ—¶ 
-		"m+": this.getMinutes(), //åˆ† 
-		"s+": this.getSeconds(), //ç§’ 
-		"q+": Math.floor((this.getMonth() + 3) / 3), //å­£åº¦ 
-		"S": this.getMilliseconds() //æ¯«ç§’ 
+		"M+": this.getMonth() + 1, //ÔÂ·İ 
+		"d+": this.getDate(), //ÈÕ 
+		"h+": this.getHours(), //Ğ¡Ê± 
+		"m+": this.getMinutes(), //·Ö 
+		"s+": this.getSeconds(), //Ãë 
+		"q+": Math.floor((this.getMonth() + 3) / 3), //¼¾¶È 
+		"S": this.getMilliseconds() //ºÁÃë 
 	};
 	if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
 	for (var k in o)

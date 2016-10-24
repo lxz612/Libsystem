@@ -2,8 +2,8 @@
 <div class="container">
 <!-- 搜索结果页 -->
 <div class="panel panel-default">
-<div class="panel-heading">
-    <h4 class="panel-title">检索结果</h4>
+  <div class="panel-heading">
+    <h4 class="panel-title">结果</h4>
   </div>
   <div class="panel-body">
   	<div class="row search-box">
@@ -36,7 +36,7 @@
         <ul class="list-group">
           {{#each books}}
             <li class="list-group-item">
-              <h6><a href="/books?marc_no={{marc_no}}"><b>1.<span style="color:#F00;">{{title}}&nbsp&nbsp</span></b></a>{{callnumber}}
+              <h6><a href="/books?marc_no={{marc_no}}"><b><span style="color:#F00;">{{title}}&nbsp&nbsp</span></b></a>{{callnumber}}
               <span class="pull-right">{{type}}</span>
               </h6>
               <p>

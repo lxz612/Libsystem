@@ -5,6 +5,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var User=require('../models/user');
 var Book=require('../models/book');
 var Borrow=require('../models/borrow');
+var Order=require('../models/order');
 
 router.get('/',function(req,res){
 	res.redirect('/search');
@@ -106,11 +107,17 @@ router.get('/order',ensureAuthenticated,function(req,res,next){
 	});
 })
 
+//发送预约请求
 router.post('/order',ensureAuthenticated,function(req,res,next){
 	var marc_no=req.body['marc_no'];
-	console.log('marc_no',marc_no);
-	res.render('result_order',{title:'预约结果-图书管理系统',
+	var number=res.locals.user.number;
+	Order.save(number,marc_no,function(err){
+		if (err) {
+			return next(err);
+		}
+		res.render('result_order',{title:'预约结果-图书管理系统',
 		arr:[{sch:'active',lib:'',abt:'',log:''}]});
+	});
 })
 
 //获取登录页
