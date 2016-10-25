@@ -17,8 +17,7 @@ Borrow.save = function(number, barcode, callback) {
 			if(err){
 				callback(err);
 			}
-
-			//更改book数据中书籍状态 0--可借 1--借出 2--遗失
+			//更改book数据库中书籍状态 0--可借 1--借出 2--遗失
 			var updatesql = "update book SET state='1' WHERE barcode='" + barcode + "';";
 			connection.query(updatesql,[],function(err,rows,fields){
 				if(err){
@@ -30,7 +29,7 @@ Borrow.save = function(number, barcode, callback) {
 				var date = new Date().Format("yyyy-MM-dd hh:mm:ss");
 				var state = 1; // 0--已还 1--未还 2--遗失
 				//写入借阅数据库中
-				var sql = "insert into borrow (number,barcode,outdate,state) values ('" + number + "','" + barcode + "','" + date + "','" + state + "');";
+				var sql = "insert into borrow (number,barcode,outdate,state,frequency) values ('" + number + "','" + barcode + "','" + date + "','" + state + "','0');";
 				connection.query(sql,[],function(err,rows,fields) {
 					if(err){
 						return connection.rollback(function(){
@@ -54,20 +53,18 @@ Borrow.save = function(number, barcode, callback) {
 	});
 };
 
-Borrow.findoutdate=function(barcode,callback){
-	var sql="select outdate from borrow where barcode='"+barcode+"';";
-	db.exec(sql,'',function(err,rows){
-		callback(err,rows);
-	});
-}
-
-//查找当前借阅的信息
+//查找当前借阅
 Borrow.findNowBorrow=function(number,callback){
 	var sql="select bk.barcode,bk.title,bk.author,bw.outdate,bw.frequency,bk.address from borrow bw,book bk where bw.barcode=bk.barcode AND bw.state='1' AND number='"+number+"';"
 	db.exec(sql,'',function(err,rows){
 		callback(err,rows);
 	}); 
 }
+
+//还书操作
+// Book.returnBook=function(number,barcode){
+
+// }
 
 //续借操作
 Borrow.renew=function(number,barcode,callback){
@@ -95,14 +92,13 @@ Borrow.renew=function(number,barcode,callback){
 
 				console.log('frequency',frequency);
 
-				if(frequency==null){
+				if(frequency=='0'){
 					frequency=1;
 				}else if(frequency=='1'){
 					frequency=2;
 				}else{
 					return callback('no pass 2')
 				}
-
 				var sql="update borrow set frequency='"+frequency+"' where number='"+number+"' and barcode='"+barcode+"'";
 				connection.query(sql,[],function(err,rows){
 					if(err){

@@ -9,8 +9,9 @@ function User(){
 
 module.exports=User;
 
-User.findUserByUsername=function(username, callback){
-	var sql="select*from reader where number='"+username+"';";
+//根据证件号查找用户
+User.findUserByNumber=function(number, callback){
+	var sql="select*from reader where number='"+number+"';";
 	db.exec(sql,'',function(err,rows){
 		//rows是一个对象数组
 		callback(err,rows[0]);

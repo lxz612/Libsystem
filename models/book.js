@@ -47,9 +47,6 @@ Book.findBookByMarcno=function(Marcno,callback){
 		}
 		callback(err,rows);
 	});
-
-	// var sql="select outdate,frequency from borrow where barcode='第一次查询中state=1'"
-
 };
 
 //根据barcode查找书籍

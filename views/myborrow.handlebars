@@ -20,6 +20,7 @@
   								<th>借阅日期</th>
   								<th>应还日期</th>
   								<th>馆藏地</th>
+                  <th>还书</th>
                   <th>续借</th>
   							</tr>
   						</thead>
@@ -32,6 +33,7 @@
   								<td>{{outdate}}</td>
   								<td>{{indate}}</td>
   								<td>{{address}}</td>
+                  <td><a href="/mylib/return?barcode={{barcode}}">还书</a></td>
                   <td><a href="/mylib/renew?barcode={{barcode}}">续借</a></td>
   							</tr>
                 {{/each}}

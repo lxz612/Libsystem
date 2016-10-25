@@ -16,6 +16,7 @@ Order.save=function(number,marc_no,callback){
 	});
 }
 
+//根据证件号查找预约信息
 Order.findOrderByNumber=function(number,callback){
 	var sql="select distinct bk.callnumber,bk.title,bk.author,bk.address,yu.marc_no,yu.orderd,yu.ind,yu.state from yuyue yu,book bk where yu.number='"+number+"' and yu.marc_no=bk.marc_no;";
 	db.exec(sql,'',function(err,rows){
@@ -23,6 +24,7 @@ Order.findOrderByNumber=function(number,callback){
 	});
 };
 
+//取消预约
 Order.cancal=function(number,marc_no,callback){
 	var sql="update yuyue set state='2' where number='"+number+"' and marc_no='"+marc_no+"';";
 	db.exec(sql,'',function(err,rows){

@@ -7,15 +7,18 @@ var Book=require('../models/book');
 var Borrow=require('../models/borrow');
 var Order=require('../models/order');
 
+//
 router.get('/',function(req,res){
 	res.redirect('/search');
 });
 
+//获取书目检索页
 router.get('/search',function(req,res){
 	res.render('search',{title:'书目检索-图书流通管理系统',
 		arr:[{sch:'active',lib:'',abt:'',log:''}]});
 });
 
+//处理检索请求
 router.post('/search',function(req,res,next) {
 	//获取post请求正文
 	console.log('body',req.body);
@@ -58,7 +61,6 @@ router.get('/books',function(req,res){
 		});
 		var firstbook=books[0];
 		if(isOrder){
-			// isOrder='<a id="order" href="#">预约</a>';
 			isOrder='<a href="/order?marc_no='+firstbook.marc_no+'">预约</a>';
 		}else{
 			isOrder='书库尚有书,不可预约';
@@ -82,7 +84,7 @@ router.get('/borrow',ensureAuthenticated,function(req,res,next){
 	});
 });
 
-//提及借书请求
+//提交借书请求
 router.post('/borrow',ensureAuthenticated,function(req,res,next){
 	var barcode=req.body.barcode;//书籍条码号
 	var number=res.locals.user.number;//读者证件号
@@ -148,7 +150,7 @@ router.post('/login',function(req,res,next){
 
 passport.use(new LocalStrategy(
 	function(username,password,done){//username即数据库表中的number
-		User.findUserByUsername(username,function(err,user){
+		User.findUserByNumber(username,function(err,user){
 			if(err) {
 				return done(err);
 			}
@@ -178,18 +180,20 @@ passport.deserializeUser(function(username,done){
 	});
 });
 
+//退出登录
 router.get('/loginOut',function(req,res){
 	req.logout();
 	res.redirect('/login');
 });
 
+//关于
 router.get('/about',function(req,res){
 	res.render('about',{title:'关于-图书流通管理系统',
 		arr:[{sch:'',lib:'',abt:'active',log:''}]});
 });
 
+//登录验证
 function ensureAuthenticated(req, res, next){
-	console.log('#######:',req.url);
 	if(req.isAuthenticated()){
 		return next();
 	} else {
