@@ -19,7 +19,7 @@ Borrow.save = function(number, barcode, callback) {
 			}
 			//更改book数据库中书籍状态 0--可借 1--借出 2--遗失
 			var updatesql = "update book SET state='1' WHERE barcode='" + barcode + "';";
-			connection.query(updatesql,[],function(err,rows,fields){
+			connection.query(updatesql,[],function(err,rows){
 				if(err){
 					return connection.rollback(function(){
 						callback(err);
@@ -30,7 +30,7 @@ Borrow.save = function(number, barcode, callback) {
 				var state = 1; // 0--已还 1--未还 2--遗失
 				//写入借阅数据库中
 				var sql = "insert into borrow (number,barcode,outdate,state,frequency) values ('" + number + "','" + barcode + "','" + date + "','" + state + "','0');";
-				connection.query(sql,[],function(err,rows,fields) {
+				connection.query(sql,[],function(err,rows) {
 					if(err){
 						return connection.rollback(function(){
 							callback(err);
@@ -43,9 +43,8 @@ Borrow.save = function(number, barcode, callback) {
 								callback(err);
 							});
 						}
-						console.log('success!');
 						connection.end();
-						callback(err);
+						callback();
 					});
 				});
 			});
@@ -62,9 +61,48 @@ Borrow.findNowBorrow=function(number,callback){
 }
 
 //还书操作
-// Book.returnBook=function(number,barcode){
+Borrow.returnBook=function(number,barcode,callback){
+	db.getConnection(function(err,connection){
+		if(err){
+			callback(err);
+		}
+		var sql;
+		connection.beginTransaction(function(err){
+			if(err){
+				return callback(err);
+			}
 
-// }
+			var date = new Date().Format("yyyy-MM-dd hh:mm:ss");//还书日期
+			sql="update borrow set state='0',indate='"+date+"' where number='"+number+"' and barcode='"+barcode+"';";
+			connection.query(sql,[],function(err){
+				if(err){
+					return connection.rollback(function(){
+						callback(err);
+					});
+				}
+
+				sql="update book set state='0' where barcode='"+barcode+"';";
+				connection.query(sql,[],function(err){
+					if(err){
+						return connection.rollback(function(){
+							callback(err);
+						});
+					}
+
+					connection.commit(function(err){
+						if(err){
+							return connection.rollback(function(){
+								callback(err);
+							});
+						}
+						connection.end();
+						callback();
+					});
+				});
+			});
+		})
+	});
+}
 
 //续借操作
 Borrow.renew=function(number,barcode,callback){
@@ -80,7 +118,7 @@ Borrow.renew=function(number,barcode,callback){
 			sql="select frequency from borrow where number='"+number+"' and barcode='"+barcode+"';";
 			connection.query(sql,[],function(err,rows){
 				if(err){
-					connection.rollback(function(){
+					return connection.rollback(function(){
 						callback(err);
 					});
 				}
@@ -102,9 +140,9 @@ Borrow.renew=function(number,barcode,callback){
 				var sql="update borrow set frequency='"+frequency+"' where number='"+number+"' and barcode='"+barcode+"'";
 				connection.query(sql,[],function(err,rows){
 					if(err){
-						connection.rollback(function(){
+						return connection.rollback(function(){
 							callback(err);
-						})
+						});
 					}
 
 					connection.commit(function(err){

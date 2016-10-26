@@ -31,6 +31,19 @@ router.get('/myborrow',ensureAuthenticated,function(req,res){
 	});
 });
 
+//还书
+router.get('/return',ensureAuthenticated,function(req,res,next){
+	var barcode=req.query.barcode;
+	var number=res.locals.user.number;
+	Borrow.returnBook(number,barcode,function(err){
+		if(err){
+			return next(err);
+		}
+		res.render('result_return',{title:'还书结果-我的图书馆',
+			arr:[{sch:'',lib:'active',abt:'',log:''}]});
+	});
+});
+
 //续借
 router.get('/renew',ensureAuthenticated,function(req,res,next){
 	var barcode=req.query.barcode;

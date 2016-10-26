@@ -1,13 +1,13 @@
 var express = require('express');
-var passport = require('passport');
 var router = express.Router();
+var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var User=require('../models/user');
 var Book=require('../models/book');
 var Borrow=require('../models/borrow');
 var Order=require('../models/order');
 
-//
+//跳转搜索页
 router.get('/',function(req,res){
 	res.redirect('/search');
 });
@@ -48,10 +48,6 @@ router.get('/books',function(req,res){
 				book.isBorrow='<a href="/borrow?barcode='+book.barcode+'">借阅</a>';
 				isOrder=false;
 			}else if(book.state==1){
-				// Borrow.findoutdate(book.barcode,function(err,rows){
-				// 	var row=rows[0];
-				// 	book.state='借出'+row.outdate.toLocaleDateString();
-				// });
 				book.state='借出';
 				book.isBorrow='此书已借出';
 			}else if(book.state==2){
@@ -128,7 +124,7 @@ router.get('/login',function(req,res){
 		arr:[{sch:'',lib:'active',abt:'',log:''}]});
 });
 
-//提交登录请求页
+//提交登录请求
 router.post('/login',function(req,res,next){
 	var referer=req.body.referer;
 	passport.authenticate('local',function(err, user, info){
@@ -175,7 +171,7 @@ passport.serializeUser(function(user,done){
 // deserializeUser 在每次请求的时候将会根据用户名读取 从 session 中读取用户的全部数据
 // 的对象，并将其封装到 req.user
 passport.deserializeUser(function(username,done){
-	User.findUserByUsername(username,function(err,user){
+	User.findUserByNumber(username,function(err,user){
 		done(err,user);
 	});
 });
