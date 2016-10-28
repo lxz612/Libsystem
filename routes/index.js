@@ -18,31 +18,37 @@ router.get('/search',function(req,res){
 		arr:[{sch:'active',lib:'',abt:'',log:''}]});
 });
 
-//处理检索请求
+//处理书目检索请求
 router.post('/search',function(req,res,next) {
 	//获取post请求正文
 	console.log('body',req.body);
 	var searchType=req.body.searchType;//搜索类型
 	var bookType=req.body.bookType;//书籍类型
 	var content=req.body.content;//搜索内容
-	Book.findBookByTitle(content,function(err,books){
+	Book.findBooksByTitle(content,function(err,books){
 		if(err){
 			return next(err);//使用return XXX 的写法是为了在发错误时不会出现res重复响应状况 
 		}
+		books.forEach(function(book){
+			if(book.type==0){
+				book.type='中文图书';
+			}
+		});
 		res.render('result',{title:'搜索结果-图书流通管理系统',
 			arr:[{sch:'active',lib:'',abt:'',log:''}],books:books});
 	});
 });
 
 //获得书籍详情
-router.get('/books',function(req,res){
-	var marc_no=req.query['marc_no'];
-	Book.findBookByMarcno(marc_no,function(err,books){
+router.get('/books',function(req,res,next){
+	var isbn=req.query['isbn'];
+	Book.findBooksByISBN(isbn,function(err,bookInfo,booksState){
 		if(err){
 			return next(err);
 		}
+
 		var isOrder=true;
-		books.forEach(function(book){
+		booksState.forEach(function(book){
 			if(book.state==0){
 				book.state='可借';
 				book.isBorrow='<a href="/borrow?barcode='+book.barcode+'">借阅</a>';
@@ -55,36 +61,33 @@ router.get('/books',function(req,res){
 				book.isBorrow='遗失';
 			}
 		});
-		var firstbook=books[0];
 		if(isOrder){
-			isOrder='<a href="/order?marc_no='+firstbook.marc_no+'">预约</a>';
+			isOrder='<a href="/order?isbn='+bookInfo.isbn+'">预约</a>';
 		}else{
 			isOrder='书库尚有书,不可预约';
 		}
 		res.render('books',{title:'书目信息-图书流通管理系统',
-			arr:[{sch:'active',lib:'',abt:'',log:''}],firstbook:firstbook,books:books,isOrder:isOrder});
+			arr:[{sch:'active',lib:'',abt:'',log:''}],bookInfo:bookInfo,booksState:booksState,isOrder:isOrder});
 	});
 });
 
 //跳转借书界面
 router.get('/borrow',ensureAuthenticated,function(req,res,next){
 	var barcode=req.query['barcode'];
-	Book.findBookBybarcode(barcode,function(err,books){
+	Book.findBookBybarcode(barcode,function(err,book){
 		if (err) {
 			return next(err);
-		}else{
-			book=books[0];
-			res.render('borrow',{title:'借阅-图书流通管理系统',
-		 		arr:[{sch:'active',lib:'',abt:'',log:''}],book:book});
 		}
+		res.render('borrow',{title:'借阅-图书流通管理系统',
+	 		arr:[{sch:'active',lib:'',abt:'',log:''}],book:book});
 	});
 });
 
 //提交借书请求
 router.post('/borrow',ensureAuthenticated,function(req,res,next){
 	var barcode=req.body.barcode;//书籍条码号
-	var number=res.locals.user.number;//读者证件号
-	Borrow.save(number,barcode,function(err){
+	var readerId=res.locals.user.readerId;//读者证件号
+	Borrow.save(readerId,barcode,function(err){
 		if (err) { 
 			return next(err);
 		}
@@ -95,8 +98,8 @@ router.post('/borrow',ensureAuthenticated,function(req,res,next){
 
 //跳转预约界面
 router.get('/order',ensureAuthenticated,function(req,res,next){
-	var marc_no=req.query['marc_no'];
-	Book.findBookByMarcno(marc_no,function(err,books){
+	var isbn=req.query['isbn'];
+	Book.findBooksByISBN(isbn,function(err,books){
 		if(err){
 			return next(err);
 		}
@@ -107,9 +110,9 @@ router.get('/order',ensureAuthenticated,function(req,res,next){
 
 //发送预约请求
 router.post('/order',ensureAuthenticated,function(req,res,next){
-	var marc_no=req.body['marc_no'];
-	var number=res.locals.user.number;
-	Order.save(number,marc_no,function(err){
+	var isbn=req.body['isbn'];
+	var readerId=res.locals.user.readerId;
+	Order.save(readerId,isbn,function(err){
 		if (err) {
 			return next(err);
 		}
@@ -145,8 +148,8 @@ router.post('/login',function(req,res,next){
 });
 
 passport.use(new LocalStrategy(
-	function(username,password,done){//username即数据库表中的number
-		User.findUserByNumber(username,function(err,user){
+	function(username,password,done){//username即数据库表中的readerId
+		User.findUserByreaderId(username,function(err,user){
 			if(err) {
 				return done(err);
 			}
@@ -165,13 +168,13 @@ passport.use(new LocalStrategy(
 // 存到 session 中的是用户的 username）。在这里的 user 应为我们之前在 new
 // LocalStrategy (fution() { ... }) 中传递到回调函数 done 的参数 user 对象（从数据// 库中获取到的）
 passport.serializeUser(function(user,done){
-	done(null,user.number);
+	done(null,user.readerId);
 });
 
 // deserializeUser 在每次请求的时候将会根据用户名读取 从 session 中读取用户的全部数据
 // 的对象，并将其封装到 req.user
 passport.deserializeUser(function(username,done){
-	User.findUserByNumber(username,function(err,user){
+	User.findUserByreaderId(username,function(err,user){
 		done(err,user);
 	});
 });

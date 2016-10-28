@@ -5,14 +5,14 @@
 	  </div>
 	  <div class="panel-body">
 	  	<div class="row" style="margin:10px;">
-	  		{{#if firstbook}}
+	  		{{#if bookInfo}}
 				<dl class="booklist clearfix">
 					<dt>题名:</dt>
-					<dd><a href="">{{firstbook.title}}</a></dd>
+					<dd><a href="">{{bookInfo.title}}</a></dd>
 				</dl>
 				<dl class="booklist clearfix">
 					<dt>作者/责任者:</dt>
-					<dd>{{firstbook.author}}</dd>
+					<dd>{{bookInfo.author}}</dd>
 				</dl>
 				<dl class="booklist clearfix">
 					<dt>版本说明:</dt>
@@ -20,19 +20,19 @@
 				</dl>
 				<dl class="booklist clearfix">
 				<dt>出版发行项:</dt>
-				<dd>{{firstbook.press}}</dd>
+				<dd>{{bookInfo.press}}</dd>
 				</dl>
 				<dl class="booklist clearfix">
 					<dt>ISBN及定价:</dt>
-					<dd>{{firstbook.isbn}}/CNY{{firstbook.price}}</dd>
+					<dd>{{bookInfo.isbn}}/CNY{{bookInfo.price}}</dd>
 				</dl>
 				<dl class="booklist clearfix">
 					<dt valign="top">内容简介: </dt>
-					<dd style="padding-bottom: 8px;">{{firstbook.content}}</dd>
+					<dd style="padding-bottom: 8px;">{{bookInfo.content}}</dd>
 				</dl>
 				<dl class="booklist clearfix">
 					<dt>目录: </dt>
-					<dd>{{{firstbook.catalog}}}</dd>
+					<dd>{{bookInfo.catalog}}</dd>
 				</dl>
 				{{/if}}
 	  	</div>
@@ -59,9 +59,9 @@
           				</tr>
           			</thead>
           			<tbody>
-          				{{#each books}}
+          				{{#each booksState}}
           				<tr>
-        	          <td>{{callnumber}}</td>
+        	          <td>{{callNumber}}</td>
         	          <td>{{barcode}}</td>
         	          <td>{{address}}</td>
         	          <td>{{state}}</td>
@@ -83,9 +83,9 @@
           			</thead>
           			<tbody>
           				<tr>
-          					{{#if firstbook}}
-        	          <td>{{firstbook.callnumber}}</td>
-        	          <td>{{firstbook.address}}</td>
+          					{{#if bookInfo}}
+        	          <td>{{bookInfo.callnumber}}</td>
+        	          <td>{{bookInfo.address}}</td>
         	          <td>借还书处(2F)</td>
         	          <td>{{{isOrder}}}</td>
         	          {{/if}}
@@ -108,10 +108,10 @@
 	        <h4 class="modal-title" id="myModalLabel">确认预约此书？</h4>
 	      </div>
 	      <div class="modal-body">
-	      {{#if firstbook}}
-	      <div>{{firstbook.callnumber}}</div>
-	      <div>{{firstbook.title}}</div>
-				<div>{{firstbook.author}}</div>
+	      {{#if bookInfo}}
+	      <div>{{bookInfo.callnumber}}</div>
+	      <div>{{bookInfo.title}}</div>
+				<div>{{bookInfo.author}}</div>
 	      {{/if}}
 	      </div>
 	      <div class="modal-footer">

@@ -4,9 +4,9 @@ var Borrow=require('../models/borrow');
 var Order=require('../models/order');
 
 //当前借阅
-router.get('/myborrow',ensureAuthenticated,function(req,res){
-	var number=res.locals.user.number;
-	Borrow.findNowBorrow(number,function(err,borrows){
+router.get('/myborrow',ensureAuthenticated,function(req,res,next){
+	var readerId=res.locals.user.readerId;
+	Borrow.findNowBorrow(readerId,function(err,borrows){
 		if(err){
 			return next(err);
 		}
@@ -19,7 +19,7 @@ router.get('/myborrow',ensureAuthenticated,function(req,res){
 			//此处indate和数据库中的indate不是一样的，
 			//这里代表应还日期，数据库中的indate是实际归还日期
 			outdate.setMonth(outdate.getMonth()+1);
-			if(borrow.frequency!='0'){//续借次数不为0
+			if(borrow.frequency!=0){//续借次数不为0
 				outdate.setDate(outdate.getDate()+10*borrow.frequency);
 				borrow.indate=outdate.toLocaleDateString();
 			}else{//续借次数为0
@@ -34,8 +34,8 @@ router.get('/myborrow',ensureAuthenticated,function(req,res){
 //还书
 router.get('/return',ensureAuthenticated,function(req,res,next){
 	var barcode=req.query.barcode;
-	var number=res.locals.user.number;
-	Borrow.returnBook(number,barcode,function(err){
+	var readerId=res.locals.user.readerId;
+	Borrow.returnBook(readerId,barcode,function(err){
 		if(err){
 			return next(err);
 		}
@@ -47,8 +47,8 @@ router.get('/return',ensureAuthenticated,function(req,res,next){
 //续借
 router.get('/renew',ensureAuthenticated,function(req,res,next){
 	var barcode=req.query.barcode;
-	var number=res.locals.user.number;
-	Borrow.renew(number,barcode,function(err){
+	var readerId=res.locals.user.readerId;
+	Borrow.renew(readerId,barcode,function(err){
 		if(err){
 			return next(err);
 		}
@@ -59,8 +59,8 @@ router.get('/renew',ensureAuthenticated,function(req,res,next){
 
 //我的预约
 router.get('/myorder',ensureAuthenticated,function(req,res){
-	var number=res.locals.user.number;
-	Order.findOrderByNumber(number,function(err,books){
+	var readerId=res.locals.user.readerId;
+	Order.findOrderByreaderId(readerId,function(err,books){
 		books.forEach(function(book){
 			//预约状态
 			if(book.state==0){
@@ -84,9 +84,9 @@ router.get('/myorder',ensureAuthenticated,function(req,res){
 
 //取消预约
 router.get('/cancal',ensureAuthenticated,function(req,res){
-	var number=res.locals.user.number;
+	var readerId=res.locals.user.readerId;
 	var marc_no=req.query['marc_no'];
-	Order.cancal(number,marc_no,function(err){
+	Order.cancal(readerId,marc_no,function(err){
 		if(err){
 			return next(err);
 		}
@@ -96,15 +96,15 @@ router.get('/cancal',ensureAuthenticated,function(req,res){
 });
 
 //借阅历史
-router.get('/history',ensureAuthenticated,function(req,res){
-	var number=res.locals.user.number;
-	Borrow.findHistory(number,function(err,rows){
+router.get('/history',ensureAuthenticated,function(req,res,next){
+	var readerId=res.locals.user.readerId;
+	Borrow.findHistory(readerId,function(err,rows){
 		if(err){
 			return next(err);
 		}
 		rows.forEach(function(row){
-			row.indate=row.indate.toLocaleDateString();
-			row.outdate=row.outdate.toLocaleDateString();//格式化时间
+			row.indate=row.inDate.toLocaleDateString();
+			row.outdate=row.outDate.toLocaleDateString();//格式化时间
 		});
 		res.render('history',{title:'借阅历史-我的图书馆',
 			arr:[{sch:'',lib:'active',abt:'',log:''}],books:rows});
@@ -119,9 +119,14 @@ router.get('/lost',ensureAuthenticated,function(req,res){
 
 //证件信息
 router.get('/info',ensureAuthenticated,function(req,res){
-	var info=res.locals.user;
+	var userInfo=res.locals.user;
+	if(userInfo.sex=='m'){
+		userInfo.sex='男';
+	}else{
+		userInfo.sex='女';
+	}
 	res.render('info',{title:'读者信息-我的图书馆',
-		arr:[{sch:'',lib:'active',abt:'',log:''}],info});
+		arr:[{sch:'',lib:'active',abt:'',log:''}],userInfo});
 });
 
 //登录认证

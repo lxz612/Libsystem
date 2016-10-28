@@ -36,13 +36,13 @@
         <ul class="list-group">
           {{#each books}}
             <li class="list-group-item">
-              <h6><a href="/books?marc_no={{marc_no}}"><b><span style="color:#F00;">{{title}}&nbsp&nbsp</span></b></a>{{callnumber}}
+              <h6><a href="/books?isbn={{isbn}}"><b><span style="color:#F00;">{{title}}&nbsp&nbsp</span></b></a>{{callNumber}}
               <span class="pull-right">{{type}}</span>
               </h6>
               <p>
                 {{author}}<br />
                 {{press}}
-                <!-- <span class="pull-right"><a href="/books?marc_no={{marc_no}}">借阅</a></span> -->
+                <!-- <span class="pull-right"><a href="/books?isbn={{isbn}}">借阅</a></span> -->
               </p>
             </li>
           {{/each}}

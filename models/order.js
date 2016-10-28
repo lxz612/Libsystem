@@ -17,7 +17,7 @@ Order.save=function(number,marc_no,callback){
 }
 
 //根据证件号查找预约信息
-Order.findOrderByNumber=function(number,callback){
+Order.findOrderByreaderId=function(number,callback){
 	var sql="select distinct bk.callnumber,bk.title,bk.author,bk.address,yu.marc_no,yu.orderd,yu.ind,yu.state from yuyue yu,book bk where yu.number='"+number+"' and yu.marc_no=bk.marc_no;";
 	db.exec(sql,'',function(err,rows){
 		callback(err,rows);
