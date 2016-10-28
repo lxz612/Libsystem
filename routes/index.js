@@ -99,25 +99,26 @@ router.post('/borrow',ensureAuthenticated,function(req,res,next){
 //跳转预约界面
 router.get('/order',ensureAuthenticated,function(req,res,next){
 	var isbn=req.query['isbn'];
-	Book.findBooksByISBN(isbn,function(err,books){
+	Book.findBooksByISBN(isbn,function(err,bookInfo,booksState){
 		if(err){
 			return next(err);
 		}
 		res.render('order',{title:'预约-图书流通管理系统',
-			arr:[{sch:'active',lib:'',abt:'',log:''}],book:books[0]});
+			arr:[{sch:'active',lib:'',abt:'',log:''}],bookInfo:bookInfo});
 	});
 })
 
 //发送预约请求
 router.post('/order',ensureAuthenticated,function(req,res,next){
 	var isbn=req.body['isbn'];
+	console.log('isbn',isbn);
 	var readerId=res.locals.user.readerId;
 	Order.save(readerId,isbn,function(err){
 		if (err) {
 			return next(err);
 		}
 		res.render('result_order',{title:'预约结果-图书管理系统',
-		arr:[{sch:'active',lib:'',abt:'',log:''}]});
+			arr:[{sch:'active',lib:'',abt:'',log:''}]});
 	});
 })
 

@@ -1,0 +1,75 @@
+//Mysql数据库中各表说明
+
+//图书表
+mysql> CREATE TABLE book(
+    -> isbn CHAR(13) NOT NULL,//ISBN--标识一本书，可能会有多个副本
+    -> title VARCHAR(50) NOT NULL,//书名
+    -> author VARCHAR(50) NOT NULL,//责任者
+    -> type VARCHAR(10) NOT NULL,//文献类型
+    -> press VARCHAR(50) NOT NULL,//出版社
+    -> price DECIMAL(10,2) NOT NULL,//定价
+    -> content TINYTEXT,//内容
+    -> catalog TINYTEXT,//目录
+    -> callNumber VARCHAR(20) NOT NULL,//索书号 
+    -> address VARCHAR(50) NOT NULL,//馆藏地 
+    -> PRIMARY KET(isbn));
+
+//图书从表
+mysql> CREATE TABLE isbn_barcode(
+    -> isbn CHAR(13) NOT NULL,
+    -> barcode CHAR(8) NOT NULL PRIMARY KEY,//条码号
+    -> state TINYINT NOT NULL DEFAULT 0);//状态 0--可借 1--借出 2--遗失
+
+//借阅表 
+mysql> CREATE TABLE borrow(
+    -> readerId VARCHAR(10) NOT NULL,
+    -> isbn CHAR(13) NOT NULL,
+    -> barcode CHAR(8) NOT NULL,
+    -> outDate DATETIME NOT NULL,//借阅日期
+    -> frequency CHAR(1),//续借次数，最多为2次
+    -> PRIMARY KEY(readerId,isbn,barcode));
+
+//借阅历史
+mysql> CREATE TABLE history(
+    -> readerId VARCHAR(10) NOT NULL,
+    -> barcode CHAR(8) NOT NULL,
+    -> outDate DATETIME NOT NULL,//借阅日期
+    -> inDate DATETIME NOT NULL,//归还日期
+    -> PRIMARY KEY(readerId,barcode,outDate,inDate));
+
+//读者表
+mysql> CREATE TABLE reader(
+    -> id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,//主键
+    -> number VARCHAR(10) NOT NULL UNIQUE,//唯一
+    -> password VARCHAR(200) NOT NULL,
+    -> name VARCHAR(20) NOT NULL,//utf8
+    -> sex CHAR(1) NOT NULL,//m--男 f--女
+    -> phone VARCHAR(50),
+    -> email VARCHAR(50),
+    -> maxBorrow TINYINT,
+    -> maxOrder TINYINT,
+    -> creditNum VARCHAR(18),//有些身份证尾号为X，所以设为字符型
+    -> type VARCHAR(10),//utf8
+    -> job VARCHAR(20),//utf8
+    -> breakRule TINYINT);
+
+//预约表 
+//order因为是数据库的关键字，所以要用撇号`括起来（是撇号不是逗号）
+mysql> CREATE TABLE `order`(
+    -> readerId VARCHAR(10) NOT NULL,
+    -> isbn CHAR(13) NOT NULL,//预约某一类书籍，所以用isbn
+    -> orderDate DATETIME NOT NULL,//预约时间
+    -> inDate DATETIME,//到书时间
+    -> state TINYINT NOT NULL
+    -> PRIMARY KEY(readerId,isbn));//状态 0--处理中 1--已到书 2--已取书
+
+//图书表插入示例
+INSERT INTO book(isbn,title,author,type,press,price,content,catalog,callNumber,address)VALUES('9787802003903','围城','钱钟书著',0,'北京:人民文学出版社,1991.2','16.00','本书内容：红海早过了，船在印度洋面上开驶着，量是太阳依然不饶人地迟落早起，侵占去大部分的夜。夜仿佛纸浸了油，变成半透明体；它给太阳拥抱住了，分不出身来，也许是给太阳陶醉了，所以夕照晚霞隐褪后的夜色也带着酡红。到红消醉醒，船舱里的睡人也一身腻汗地醒来，洗了澡赶到甲板上吹海风，又是一天开始。这是七月下旬，合中国旧历的三伏，一年最热的时候。在中国热得更比常年利害，事后大家都说是兵戈之象，因为这就是民国二十六年（一九三七年）。','序 围城 附录 记钱钟书与《围城》','I246.5/885','文艺、传记书库（9F）')
+
+//图书从表插入示例
+INSERT INTO isbn_barcode VALUE('9787505963191','71463413',0)
+
+//读者插入语句
+INSERT INTO reader (number,password,name,sex,phone,email,maxBorrow,maxOrder,creditNum,type,job,breakRule)
+VALUES
+('13032139','13032139','男神Li','m','13585535424','lvx612@126.com',10,2,'420450199501153935','学生','数字媒体技术',0);

@@ -65,11 +65,11 @@ router.get('/myorder',ensureAuthenticated,function(req,res){
 			//预约状态
 			if(book.state==0){
 				//预约截止日期
-				book.deadline=book.orderd.getFullYear()+'-'+(book.orderd.getMonth()+2)+'-'+book.orderd.getDate();
+				book.deadline=book.orderDate.getFullYear()+'-'+(book.orderDate.getMonth()+2)+'-'+book.orderDate.getDate();
 				book.state="申请中";
 			}else if(book.state==1){
 				//预约截止日期
-				book.deadline=book.ind.getFullYear()+'-'+(book.ind.getMonth()+1)+'-'+(book.ind.getDate()+5);
+				book.deadline=book.inDate.getFullYear()+'-'+(book.inDate.getMonth()+1)+'-'+(book.inDate.getDate()+5);
 				book.state="已到馆,保留五日,速借";
 			}else{
 				//已取书或者预约取消，则不显示此条记录
@@ -85,8 +85,8 @@ router.get('/myorder',ensureAuthenticated,function(req,res){
 //取消预约
 router.get('/cancal',ensureAuthenticated,function(req,res){
 	var readerId=res.locals.user.readerId;
-	var marc_no=req.query['marc_no'];
-	Order.cancal(readerId,marc_no,function(err){
+	var isbn=req.query['isbn'];
+	Order.cancal(readerId,isbn,function(err){
 		if(err){
 			return next(err);
 		}
@@ -126,7 +126,7 @@ router.get('/info',ensureAuthenticated,function(req,res){
 		userInfo.sex='女';
 	}
 	res.render('info',{title:'读者信息-我的图书馆',
-		arr:[{sch:'',lib:'active',abt:'',log:''}],userInfo});
+		arr:[{sch:'',lib:'active',abt:'',log:''}],info:userInfo});
 });
 
 //登录认证

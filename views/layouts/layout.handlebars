@@ -167,11 +167,11 @@
 	  //预约请求
 	  $(document).ready(function(){
 	  	$('#order').click(function(){
-	  		var marcno=$('#marc').val();
-	  		alert(marcno);
+	  		var isbn=$('#isbn').val();
+	  		alert(isbn);
 	  		var url="/order";
 	  		$.StandardPost(url,{
-	  			marc_no:marcno
+	  			isbn:isbn
 	  		});
 	  	});
 	  });

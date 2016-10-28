@@ -5,28 +5,28 @@
       <h4 class="panel-title">预约</h4>
     </div>
     <div class="panel-body">
-      {{#if book}}
+      {{#if bookInfo}}
       <div class="col-lg-4 col-lg-offset-4">
         <h4 class="text-center">确认图书基本信息：</h4>
         <table class="table table-bordered">
           <tbody>
             <tr>
               <td width="20%">索书号</td>
-              <td id="barcode">{{book.callnumber}}</td>
+              <td id="barcode">{{bookInfo.callNumber}}</td>
             </tr>
             <tr>
               <td width="20%">书名</td>
-              <td>{{book.title}}</td>
+              <td>{{bookInfo.title}}</td>
             </tr>
             <tr>
               <td width="20%">责任者</td>
-              <td>{{book.author}}</td>
+              <td>{{bookInfo.author}}</td>
             </tr>
             <tr>
               <td width="20%">出版社</td>
-              <td>{{book.press}}</td>
+              <td>{{bookInfo.press}}</td>
             </tr>
-            <input id="marc" type="hidden" value="{{book.marc_no}}">
+            <input id="isbn" type="hidden" value="{{bookInfo.isbn}}">
           </tbody>
         </table>
         <Button id="order" class="btn btn-primary">预约</Button>

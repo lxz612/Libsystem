@@ -46,7 +46,7 @@ Book.findBooksByISBN=function(isbn,callback){
 			if(err){
 				return callback(err);
 			}
-			sql="SELECT isbn,title,author,press,price,content,catalog FROM book WHERE isbn='"+isbn+"';";
+			sql="SELECT isbn,title,author,press,price,content,catalog,address,callNumber FROM book WHERE isbn='"+isbn+"';";
 			connection.query(sql,[],function(err,rows){
 				if(err){
 					return connection.rollback(function(){
