@@ -133,18 +133,16 @@
 
 	    //搜索按钮点击
 	    $('#submit').click(function() {
-	    	var url='/search';
+	    	var url='/search/r';
 	    	var searchType=mydropdown.getValue();
 	    	var bookType=myradio.getValue();
 	    	var content=$('#content').val();
 	    	if (content==''){
 	    		alert('请输入搜索内容...');
 	    	}else{
-	    		$.StandardPost(url,{
-	    			searchType:searchType,
-	    			bookType:bookType,
-	    			content:content
-	    		});
+	    		url=url+"?sType="+searchType+"&bType="+bookType+"&content="+content;
+	    		//跳转结果页 GET
+	    		document.location.href=url;
 	    	}
 	    });
 	  });
@@ -156,7 +154,6 @@
 				if(barcode==""){
 					barcode=$("#barcode").val();
 				}
-				// if (barcode="") {}
 				var url="/borrow";
 				$.StandardPost(url,{
 					barcode:barcode
@@ -175,6 +172,46 @@
 	  		});
 	  	});
 	  });
+
+	  //续借请求
+	  $(document).ready(function(){
+	  	$(".renew").each(function(index){
+	  		$(this).eq(index).click(function(){
+	  			var url="/mylib/renew";
+	  			var barcode=$(".barcode").eq(index).text();
+	  			$.StandardPost(url,{
+		  			barcode:barcode
+		  		});
+	  		});
+	  	});
+	  });
+
+	  //还书请求
+    $(document).ready(function(){
+    	$(".return").each(function(index){
+    		$(this).eq(index).click(function(){
+    			var url="/mylib/return";
+    			var barcode=$(".barcode").eq(index).text();
+    			$.StandardPost(url,{
+  	  			barcode:barcode
+  	  		});
+    		});
+    	});
+    });
+
+    //取消预约
+    $(document).ready(function(){
+    	$(".cancel").each(function(index){
+    		$(this).eq(index).click(function(){
+    			var url="/mylib/cancel";
+    			var isbn=$(this).val();
+    			$.StandardPost(url,{
+  	  			isbn:isbn
+  	  		});
+    		});
+    	});
+    });
+	  
  
 	  //构建post请求
 	  $.extend({

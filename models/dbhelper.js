@@ -1,23 +1,19 @@
 var mysql = require('mysql');
-//填写数据库连接信息，可查询数据库详情页
-var username = 'root';
-var password = '';
-var db_host = '127.0.0.1';
-var db_port = 3306;
-var db_name = 'libsystem';
+var config=require('../config');
 
 var option = {
-	host: db_host,
-	port: db_port,
-	user: username,
-	password: password,
-	database: db_name
+	host: config.db_host,
+	port: config.db_port,
+	user: config.username,
+	password: config.password,
+	database: config.db_name
 };
 
 var DB={};
 
 module.exports = DB;
 
+//sql语句执行
 DB.exec=function(sqls, values, after) {
 	var connection = mysql.createConnection(option);
 	connection.connect(function(err) {

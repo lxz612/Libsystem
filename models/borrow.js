@@ -61,7 +61,7 @@ Borrow.save = function(readerId, barcode, callback) {
 
 //当前借阅
 Borrow.findNowBorrow=function(readerId,callback){
-	var sql="select bw.barcode,bk.title,bk.author,bw.outdate,bw.frequency,bk.address from borrow bw,book bk where bw.isbn=bk.isbn AND readerId='"+readerId+"';"
+	var sql="select bw.barcode,bk.title,bk.author,bw.outdate,bw.frequency,bk.address from borrow bw,book bk where bw.isbn=bk.isbn AND readerId='"+readerId+"' ORDER BY bw.outDate DESC;"
 	db.exec(sql,'',function(err,rows){
 		callback(err,rows);
 	});
@@ -184,7 +184,7 @@ Borrow.renew=function(readerId,barcode,callback){
 
 //历史借阅
 Borrow.findHistory=function(readerId,callback){
-	var sql="SELECT ib.barcode,bk.title,bk.author,his.outDate,his.inDate,bk.address FROM history his,book bk,isbn_barcode ib WHERE his.barcode=ib.barcode AND ib.isbn=bk.isbn AND readerId='"+readerId+"';"
+	var sql="SELECT ib.barcode,bk.title,bk.author,his.outDate,his.inDate,bk.address FROM history his,book bk,isbn_barcode ib WHERE his.barcode=ib.barcode AND ib.isbn=bk.isbn AND readerId='"+readerId+"' ORDER BY his.inDate DESC;"
 	db.exec(sql,'',function(err,rows){
 		callback(err,rows);
 	});

@@ -11,7 +11,7 @@
         <div class="panel-body">
   				<!-- <h2 class="sub-header">Section title</h2> -->
   				<div class="table-responsive">
-  					<table class="table table-striped">
+  					<table class="table table-condensed">
   						<thead>
   							<tr>
   								<th>条码号</th>
@@ -27,14 +27,14 @@
   						<tbody>
                 {{#each borrows}}
   							<tr>
-  								<td>{{barcode}}</td>
+  								<td class="barcode">{{barcode}}</td>
   								<td>{{title}}</td>
                   <td>{{author}}</td>
   								<td>{{outdate}}</td>
   								<td>{{indate}}</td>
   								<td>{{address}}</td>
-                  <td><a href="/mylib/return?barcode={{barcode}}">还书</a></td>
-                  <td><a href="/mylib/renew?barcode={{barcode}}">续借</a></td>
+                  <td><button class="return btn btn-sm">还书</button></td>
+                  <td><button class="renew btn btn-sm">续借</button></td>
   							</tr>
                 {{/each}}
   						</tbody>

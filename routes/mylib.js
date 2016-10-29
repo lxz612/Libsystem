@@ -32,8 +32,8 @@ router.get('/myborrow',ensureAuthenticated,function(req,res,next){
 });
 
 //还书
-router.get('/return',ensureAuthenticated,function(req,res,next){
-	var barcode=req.query.barcode;
+router.post('/return',ensureAuthenticated,function(req,res,next){
+	var barcode=req.body.barcode;
 	var readerId=res.locals.user.readerId;
 	Borrow.returnBook(readerId,barcode,function(err){
 		if(err){
@@ -45,8 +45,9 @@ router.get('/return',ensureAuthenticated,function(req,res,next){
 });
 
 //续借
-router.get('/renew',ensureAuthenticated,function(req,res,next){
-	var barcode=req.query.barcode;
+router.post('/renew',ensureAuthenticated,function(req,res,next){
+	var barcode=req.body.barcode;
+	console.log('barcode',barcode);
 	var readerId=res.locals.user.readerId;
 	Borrow.renew(readerId,barcode,function(err){
 		if(err){
@@ -54,7 +55,7 @@ router.get('/renew',ensureAuthenticated,function(req,res,next){
 		}
 		res.render('result_renew',{title:'续借结果-我的图书馆',
 			arr:[{sch:'',lib:'active',abt:'',log:''}]});
-		});
+	});
 });
 
 //我的预约
@@ -83,14 +84,14 @@ router.get('/myorder',ensureAuthenticated,function(req,res){
 });
 
 //取消预约
-router.get('/cancal',ensureAuthenticated,function(req,res){
+router.post('/cancel',ensureAuthenticated,function(req,res){
 	var readerId=res.locals.user.readerId;
-	var isbn=req.query['isbn'];
-	Order.cancal(readerId,isbn,function(err){
+	var isbn=req.body.isbn;
+	Order.cancel(readerId,isbn,function(err){
 		if(err){
 			return next(err);
 		}
-		res.render('result_cancal',{title:'取消预约',
+		res.render('result_cancel',{title:'取消预约',
 		 arr:[{sch:'',lib:'active',abt:'',log:''}]});
 	});
 });

@@ -19,12 +19,11 @@ router.get('/search',function(req,res){
 });
 
 //处理书目检索请求
-router.post('/search',function(req,res,next) {
-	//获取post请求正文
-	console.log('body',req.body);
-	var searchType=req.body.searchType;//搜索类型
-	var bookType=req.body.bookType;//书籍类型
-	var content=req.body.content;//搜索内容
+router.get('/search/r',function(req,res,next) {
+	var searchType=req.query.sType;//搜索类型
+	var bookType=req.query.bType;//书籍类型
+	var content=req.query.content;//搜索内容
+	console.log('content',content);
 	Book.findBooksByTitle(content,function(err,books){
 		if(err){
 			return next(err);//使用return XXX 的写法是为了在发错误时不会出现res重复响应状况 

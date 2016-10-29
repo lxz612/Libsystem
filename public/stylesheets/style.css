@@ -1,3 +1,25 @@
+html {
+  overflow-y: scroll;
+}
+
+:root {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+:root body {
+  position: absolute;
+}
+
+body {
+  width: 100vw;
+  overflow: hidden;
+}
+/*
+	以上代码是为了解决切换到"借阅历史"时，页面因滚动条出现而产生跳动的问题
+	如需深入了解，请参考http://www.zhangxinxu.com/wordpress/2015/01/css-page-scrollbar-toggle-center-no-jumping/
+*/
+
 .search-box{
 	margin: 40px 0 0;
 }
@@ -13,8 +35,6 @@
 .Login-box{
 	margin:20px 0 20px;
 }
-
-
 
 .footer{
 	padding-top: 19px;

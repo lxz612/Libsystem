@@ -64,7 +64,7 @@ Order.findOrderByreaderId=function(readerId,callback){
 };
 
 //取消预约
-Order.cancal=function(readerId,isbn,callback){
+Order.cancel=function(readerId,isbn,callback){
 	var sql="DELETE FROM `order` WHERE readerId='"+readerId+"' and isbn='"+isbn+"';";
 	db.exec(sql,'',function(err,rows){
 		callback(err);
