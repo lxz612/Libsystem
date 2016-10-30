@@ -135,10 +135,12 @@ router.post('/login',function(req,res,next){
 			return next(err);
 		}
 		if(!user){
+			req.flash('error_msg',info.message);
 			return res.redirect('/login');
 		}
 		req.logIn(user, function(err) {//这里内部会调用passport.serializeUser()
 		  	if (err) { return next(err); }
+		  	req.flash('success_msg','登录成功...');
 		  	if(referer!='http://127.0.0.1:3000/login'){
 		  		return res.redirect(referer);
 		  	}
@@ -196,6 +198,7 @@ function ensureAuthenticated(req, res, next){
 	if(req.isAuthenticated()){
 		return next();
 	} else {
+		req.flash('error_msg','You are not logged in');
 		res.redirect('/login');
 	}
 }

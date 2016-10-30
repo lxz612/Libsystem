@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var exphbs = require('express-handlebars');
+var flash = require('connect-flash');
 
 var session = require('express-session');
 var passport = require('passport');
@@ -17,7 +18,7 @@ var helpers=require('./helpers/helpers');
 
 var app = express();
 
-// view engine setup
+// 模板引擎设置
 app.set('views', path.join(__dirname, 'views'));
 app.engine('handlebars', exphbs({
   defaultLayout:'layout',
@@ -28,7 +29,7 @@ app.engine('handlebars', exphbs({
 }));
 app.set('view engine', 'handlebars');
 
-// uncomment after placing your favicon in /public
+// 设置网站的图标
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
 app.use(logger('dev'));
@@ -48,7 +49,12 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+//网站信息寄存器
+app.use(flash());
+
 app.use(function(req,res,next){
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
   res.locals.user = req.user || null;
   next();
 });
@@ -56,17 +62,17 @@ app.use(function(req,res,next){
 app.use('/',routes);
 app.use('/mylib',mylib);
 
-// catch 404 and forward to error handler
+// 捕获404并定向到错误处理
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
-// error handlers
+// 错误的统一处理
 
-// development error handler
-// will print stacktrace
+// 开发环境的错误处理
+// 会打印出堆栈信息
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
@@ -77,8 +83,8 @@ if (app.get('env') === 'development') {
   });
 }
 
-// production error handler
-// no stacktraces leaked to user
+// 生产环境下的错误处理
+// 不会向用户输出堆栈信息
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error', {

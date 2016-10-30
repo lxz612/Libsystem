@@ -11,8 +11,11 @@ module.exports=User;
 
 //根据证件号查找用户
 User.findUserByreaderId=function(readerId, callback){
-	var sql="select*from reader where readerId='"+readerId+"';";
+	var sql="SELECT*FROM reader WHERE readerId='"+readerId+"';";
 	db.exec(sql,'',function(err,rows){
+		if(err){
+			return callback(err);
+		}
 		//rows是一个对象数组
 		callback(err,rows[0]);
 	});

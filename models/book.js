@@ -20,17 +20,17 @@ module.exports=Book;
 
 //保存书籍信息--后台使用的方法
 Book.prototype.save = function() {
-	var sql="select*from book where title LIKE '%"+title+"%';";
+	var sql="";
 };
 
 //根据书名查找书
 Book.findBooksByTitle=function(title,callback){
 	var sql="SELECT isbn,title,author,type,press,callNumber FROM book WHERE title LIKE '%"+title+"%';";
 	db.exec(sql,'',function(err,rows){
-		//rows是一个对象数组
-		for(var i=0;i<rows.length;i++){
-			console.log(rows[i].title);
+		if(err){
+			return callback(err);
 		}
+		//rows是一个对象数组
 		callback(err,rows);
 	});
 };
@@ -82,8 +82,11 @@ Book.findBooksByISBN=function(isbn,callback){
 
 //根据barcode查找书籍
 Book.findBookBybarcode=function(barcode,callback){
-	var sql="select bk.title,ib.barcode,bk.author,bk.press from book bk,isbn_barcode ib where barcode='"+barcode+"' AND bk.isbn=ib.isbn;";
+	var sql="SELECT bk.title,ib.barcode,bk.author,bk.press FROM book bk,isbn_barcode ib WHERE barcode='"+barcode+"' AND bk.isbn=ib.isbn;";
 	db.exec(sql,'',function(err,rows){
+		if(err){
+			callback(err);
+		}
 		callback(err,rows[0]);
 	});
 };

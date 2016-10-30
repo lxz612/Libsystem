@@ -11,12 +11,12 @@ module.exports = Borrow;
 Borrow.save = function(readerId, barcode, callback) {
 	db.getConnection(function(err,connection){
 		if(err){
-			throw err;
+			return callback(err);
 		}
 		var sql;
 		connection.beginTransaction(function(err){
 			if(err){
-				callback(err);
+				return callback(err);
 			}
 			sql="SELECT isbn FROM isbn_barcode WHERE barcode='"+barcode+"';";
 			connection.query(sql,[],function(err,rows){
@@ -61,8 +61,11 @@ Borrow.save = function(readerId, barcode, callback) {
 
 //当前借阅
 Borrow.findNowBorrow=function(readerId,callback){
-	var sql="select bw.barcode,bk.title,bk.author,bw.outdate,bw.frequency,bk.address from borrow bw,book bk where bw.isbn=bk.isbn AND readerId='"+readerId+"' ORDER BY bw.outDate DESC;"
+	var sql="SELECT bw.barcode,bk.title,bk.author,bw.outdate,bw.frequency,bk.address FROM borrow bw,book bk WHERE bw.isbn=bk.isbn AND readerId='"+readerId+"' ORDER BY bw.outDate DESC;"
 	db.exec(sql,'',function(err,rows){
+		if(err){
+			return callback(err);
+		}
 		callback(err,rows);
 	});
 }
@@ -71,7 +74,7 @@ Borrow.findNowBorrow=function(readerId,callback){
 Borrow.returnBook=function(readerId,barcode,callback){
 	db.getConnection(function(err,connection){
 		if(err){
-			callback(err);
+			return callback(err);
 		}
 		var sql;
 		connection.beginTransaction(function(err){
@@ -136,14 +139,14 @@ Borrow.returnBook=function(readerId,barcode,callback){
 Borrow.renew=function(readerId,barcode,callback){
 	db.getConnection(function(err,connection){
 		if(err){
-			throw err;
+			return callback(err);
 		}
 		var sql;
 		connection.beginTransaction(function(err){
 			if(err){
 				return callback(err);
 			}
-			sql="SELECT frequency FROM borrow where readerId='"+readerId+"' and barcode='"+barcode+"';";
+			sql="SELECT frequency FROM borrow WHERE readerId='"+readerId+"' AND barcode='"+barcode+"';";
 			connection.query(sql,[],function(err,rows){
 				if(err){
 					return connection.rollback(function(){
@@ -158,9 +161,9 @@ Borrow.renew=function(readerId,barcode,callback){
 				}else if(frequency==1){
 					frequency=2;
 				}else{
-					return callback('no pass 2')
+					return callback('续借不能超过2次！')
 				}
-				var sql="UPDATE borrow SET frequency="+frequency+" WHERE readerId='"+readerId+"' and barcode='"+barcode+"'";
+				var sql="UPDATE borrow SET frequency="+frequency+" WHERE readerId='"+readerId+"' AND barcode='"+barcode+"'";
 				connection.query(sql,[],function(err,rows){
 					if(err){
 						return connection.rollback(function(){
@@ -186,6 +189,9 @@ Borrow.renew=function(readerId,barcode,callback){
 Borrow.findHistory=function(readerId,callback){
 	var sql="SELECT ib.barcode,bk.title,bk.author,his.outDate,his.inDate,bk.address FROM history his,book bk,isbn_barcode ib WHERE his.barcode=ib.barcode AND ib.isbn=bk.isbn AND readerId='"+readerId+"' ORDER BY his.inDate DESC;"
 	db.exec(sql,'',function(err,rows){
+		if(err){
+			return callback(err);
+		}
 		callback(err,rows);
 	});
 };

@@ -59,15 +59,21 @@ Order.save=function(readerId,isbn,callback){
 Order.findOrderByreaderId=function(readerId,callback){
 	var sql="SELECT bk.callNumber,bk.title,bk.author,bk.address,ord.isbn,ord.orderDate,ord.inDate,ord.state FROM `order` ord,book bk WHERE ord.readerId='"+readerId+"' AND ord.isbn=bk.isbn";
 	db.exec(sql,'',function(err,rows){
-		callback(err,rows);
+		if(err){
+			return callback(err);
+		}
+		callback(undefined,rows);
 	});
 };
 
 //取消预约
 Order.cancel=function(readerId,isbn,callback){
-	var sql="DELETE FROM `order` WHERE readerId='"+readerId+"' and isbn='"+isbn+"';";
+	var sql="DELETE FROM `order` WHERE readerId='"+readerId+"' AND isbn='"+isbn+"';";
 	db.exec(sql,'',function(err,rows){
-		callback(err);
+		if(err){
+			return callback(err);
+		}
+		callback(undefined);
 	});
 };
 
