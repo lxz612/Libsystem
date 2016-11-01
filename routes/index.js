@@ -14,8 +14,10 @@ router.get('/',function(req,res){
 
 //获取书目检索页
 router.get('/search',function(req,res){
-	res.render('search',{title:'书目检索-图书流通管理系统',
-		arr:[{sch:'active',lib:'',abt:'',log:''}]});
+	res.render('search',{
+		title:'书目检索-图书流通管理系统',
+		arr:[{sch:'active',lib:'',abt:'',log:''}]
+	});
 });
 
 //处理书目检索请求
@@ -33,8 +35,11 @@ router.get('/search/r',function(req,res,next) {
 				book.type='中文图书';
 			}
 		});
-		res.render('result',{title:'搜索结果-图书流通管理系统',
-			arr:[{sch:'active',lib:'',abt:'',log:''}],books:books});
+		res.render('result',{
+			title:'搜索结果-图书流通管理系统',
+			arr:[{sch:'active',lib:'',abt:'',log:''}],
+			books:books,
+		});
 	});
 });
 
@@ -65,8 +70,13 @@ router.get('/books',function(req,res,next){
 		}else{
 			isOrder='书库尚有书,不可预约';
 		}
-		res.render('books',{title:'书目信息-图书流通管理系统',
-			arr:[{sch:'active',lib:'',abt:'',log:''}],bookInfo:bookInfo,booksState:booksState,isOrder:isOrder});
+		res.render('books',{
+			title:'书目信息-图书流通管理系统',
+			arr:[{sch:'active',lib:'',abt:'',log:''}],
+			bookInfo:bookInfo,
+			booksState:booksState,
+			isOrder:isOrder
+		});
 	});
 });
 
@@ -77,8 +87,11 @@ router.get('/borrow',ensureAuthenticated,function(req,res,next){
 		if (err) {
 			return next(err);
 		}
-		res.render('borrow',{title:'借阅-图书流通管理系统',
-	 		arr:[{sch:'active',lib:'',abt:'',log:''}],book:book});
+		res.render('borrow',{
+			title:'借阅-图书流通管理系统',
+	 		arr:[{sch:'active',lib:'',abt:'',log:''}],
+	 		book:book
+	 	});
 	});
 });
 
@@ -90,8 +103,10 @@ router.post('/borrow',ensureAuthenticated,function(req,res,next){
 		if (err) { 
 			return next(err);
 		}
-		res.render('result_borrow',{title:'借阅结果-图书流通管理系统',
-		 		arr:[{sch:'active',lib:'',abt:'',log:''}]});
+		res.render('result_borrow',{
+			title:'借阅结果-图书流通管理系统',
+		 	arr:[{sch:'active',lib:'',abt:'',log:''}]
+		 });
 	});
 });
 
@@ -102,8 +117,11 @@ router.get('/order',ensureAuthenticated,function(req,res,next){
 		if(err){
 			return next(err);
 		}
-		res.render('order',{title:'预约-图书流通管理系统',
-			arr:[{sch:'active',lib:'',abt:'',log:''}],bookInfo:bookInfo});
+		res.render('order',{
+			title:'预约-图书流通管理系统',
+			arr:[{sch:'active',lib:'',abt:'',log:''}],
+			bookInfo:bookInfo
+		});
 	});
 })
 
@@ -116,15 +134,19 @@ router.post('/order',ensureAuthenticated,function(req,res,next){
 		if (err) {
 			return next(err);
 		}
-		res.render('result_order',{title:'预约结果-图书管理系统',
-			arr:[{sch:'active',lib:'',abt:'',log:''}]});
+		res.render('result_order',{
+			title:'预约结果-图书管理系统',
+			arr:[{sch:'active',lib:'',abt:'',log:''}]
+		});
 	});
 })
 
 //获取登录页
 router.get('/login',function(req,res){
-	res.render('login',{title:'登录-图书流通管理系统',
-		arr:[{sch:'',lib:'active',abt:'',log:''}]});
+	res.render('login',{
+		title:'登录-图书流通管理系统',
+		arr:[{sch:'',lib:'active',abt:'',log:''}]
+	});
 });
 
 //提交登录请求
@@ -189,8 +211,10 @@ router.get('/loginOut',function(req,res){
 
 //关于
 router.get('/about',function(req,res){
-	res.render('about',{title:'关于-图书流通管理系统',
-		arr:[{sch:'',lib:'',abt:'active',log:''}]});
+	res.render('about',{
+		title:'关于-图书流通管理系统',
+		arr:[{sch:'',lib:'',abt:'active',log:''}]
+	});
 });
 
 //登录验证

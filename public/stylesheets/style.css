@@ -20,6 +20,16 @@ body {
 	如需深入了解，请参考http://www.zhangxinxu.com/wordpress/2015/01/css-page-scrollbar-toggle-center-no-jumping/
 */
 
+
+.booklist dt{
+	float: left;
+	width: 10%;
+}
+.booklist dd{
+	width: 90%;
+	float: right;
+}
+
 .search-box{
 	margin: 40px 0 0;
 }
@@ -30,7 +40,6 @@ body {
 .search-result{
 	margin: 20px 0;
 }
-
 
 .Login-box{
 	margin:20px 0 20px;

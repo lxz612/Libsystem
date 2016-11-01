@@ -26,8 +26,11 @@ router.get('/myborrow',ensureAuthenticated,function(req,res,next){
 				borrow.indate=outdate.toLocaleDateString();
 			}
 		});
-		res.render('myborrow',{title:'当前借阅-我的图书馆',
-			arr:[{sch:'',lib:'active',abt:'',log:''}],borrows:borrows});
+		res.render('myborrow',{
+			title:'当前借阅-我的图书馆',
+			arr:[{sch:'',lib:'active',abt:'',log:''}],
+			borrows:borrows
+		});
 	});
 });
 
@@ -39,8 +42,10 @@ router.post('/return',ensureAuthenticated,function(req,res,next){
 		if(err){
 			return next(err);
 		}
-		res.render('result_return',{title:'还书结果-我的图书馆',
-			arr:[{sch:'',lib:'active',abt:'',log:''}]});
+		res.render('result_return',{
+			title:'还书结果-我的图书馆',
+			arr:[{sch:'',lib:'active',abt:'',log:''}]
+		});
 	});
 });
 
@@ -53,8 +58,10 @@ router.post('/renew',ensureAuthenticated,function(req,res,next){
 		if(err){
 			return next(err);
 		}
-		res.render('result_renew',{title:'续借结果-我的图书馆',
-			arr:[{sch:'',lib:'active',abt:'',log:''}]});
+		res.render('result_renew',{
+			title:'续借结果-我的图书馆',
+			arr:[{sch:'',lib:'active',abt:'',log:''}]
+		});
 	});
 });
 
@@ -78,8 +85,10 @@ router.get('/myorder',ensureAuthenticated,function(req,res){
 				delete book;
 			}
 		});
-		res.render('myorder',{title:'我的预约-我的图书馆',
-		 arr:[{sch:'',lib:'active',abt:'',log:''}],books:books});
+		res.render('myorder',{
+			title:'我的预约-我的图书馆',
+		  arr:[{sch:'',lib:'active',abt:'',log:''}],
+		  books:books});
 	})
 });
 
@@ -91,8 +100,10 @@ router.post('/cancel',ensureAuthenticated,function(req,res){
 		if(err){
 			return next(err);
 		}
-		res.render('result_cancel',{title:'取消预约',
-		 arr:[{sch:'',lib:'active',abt:'',log:''}]});
+		res.render('result_cancel',{
+			title:'取消预约',
+		  arr:[{sch:'',lib:'active',abt:'',log:''}]
+		});
 	});
 });
 
@@ -107,15 +118,20 @@ router.get('/history',ensureAuthenticated,function(req,res,next){
 			row.indate=row.inDate.toLocaleDateString();
 			row.outdate=row.outDate.toLocaleDateString();//格式化时间
 		});
-		res.render('history',{title:'借阅历史-我的图书馆',
-			arr:[{sch:'',lib:'active',abt:'',log:''}],books:rows});
+		res.render('history',{
+			title:'借阅历史-我的图书馆',
+			arr:[{sch:'',lib:'active',abt:'',log:''}],
+			books:rows
+		});
 	});
 });
 
 //书刊遗失
 router.get('/lost',ensureAuthenticated,function(req,res){
-	res.render('lost',{title:'书刊遗失-我的图书馆',
-		arr:[{sch:'',lib:'active',abt:'',log:''}]});
+	res.render('lost',{
+		title:'书刊遗失-我的图书馆',
+		arr:[{sch:'',lib:'active',abt:'',log:''}]
+	});
 });
 
 //证件信息
@@ -126,8 +142,11 @@ router.get('/info',ensureAuthenticated,function(req,res){
 	}else{
 		userInfo.sex='女';
 	}
-	res.render('info',{title:'读者信息-我的图书馆',
-		arr:[{sch:'',lib:'active',abt:'',log:''}],info:userInfo});
+	res.render('info',{
+		title:'读者信息-我的图书馆',
+		arr:[{sch:'',lib:'active',abt:'',log:''}],
+		info:userInfo
+	});
 });
 
 //登录认证

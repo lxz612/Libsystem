@@ -5,20 +5,20 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>{{title}}</title>
-  <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+
+	<!--############################################## -->
+	<!-- 通过handlebars的helper来实现css和js资源的加载。这种方式的优点是可以在需要资源的页面才加载所需的资源。可以参考这篇博客：http://www.cnblogs.com/qieguo/p/5811988.html -->
+  {{css "/stylesheets/style.css"}}
+  {{#each cssList}}
+ 	 	<link rel='stylesheet' href={{this}} />
+  {{/each}}
+
+  <!-- 其实小项目是没必要像上面这么写，直接用下面的语句引用css资源就好了。我只是为了示范下handlebars的helper更高级的用法而已。-->
+  <!-- <link rel="stylesheet" type="text/css" href="/stylesheets/style.css"> -->
+  <!--############################################## -->
+
 	<!-- 新 Bootstrap 核心 CSS 文件 -->
 	<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
-	<style type="text/css">
-		.booklist dt{
-			float: left;
-			width: 10%;
-			/*text-align: right;*/
-		}
-		.booklist dd{
-			width: 90%;
-			float: right;
-		}
-	</style>
 </head>
 <body>
   <!-- 公共头部 -->
@@ -71,172 +71,13 @@
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 	<!-- <script src="http://v3.bootcss.com/assets/js/docs.min.js"></script> -->
-	<script type="text/javascript">
-		/*下拉框选择*/
-	  function CustomDropDown(element){
-	    this.dropdown=element;
-	    this.placeholder=this.dropdown.find(".placeholder");
-	    this.options=this.dropdown.find("ul.dropdown-menu > li");
-	    this.val='0';
-	    this.index=-1;//默认为-1;
-	    this.initEvents();//初始化事件
-	  }
-	  //原型方法
-	  CustomDropDown.prototype = {
-	    initEvents: function() {
-	      var obj = this;
-	      //这个方法可以不写，因为点击事件被Bootstrap本身就捕获了，显示下面下拉列表
-	      // obj.dropdown.on("click", function(event) {
-	      //   $(this).toggleClass("active");
-	      // });
+	
+	<!-- 参考上面css -->
+	{{js "javascripts/search.js"}}
+	{{js "javascripts/mylib.js"}}
+	{{#each jsList}}
+ 	 	<script src={{this}}></script>
+  {{/each}}
 
-	      //点击下拉列表的选项
-	      obj.options.on("click", function() {
-	        var opt = $(this);
-	        obj.text = opt.find("a").text();
-	        obj.val = opt.attr("value");
-	        obj.index = opt.index();
-	        obj.placeholder.text(obj.text);
-	        // console.log(obj.getValue());
-	      });
-	    },
-	    getText: function() {
-	      return this.text;
-	    },
-	    getValue: function() {
-	      return this.val;
-	    },
-	    getIndex: function() {
-	      return this.index;
-	    }
-	  };
-	  
-
-	  /*单选框选择*/
-	  function RadioSelect(element){
-	  	this.obj=element;
-
-	  	this.options=this.obj.find('input');
-
-	  	this.val='all';
-	  	this.initEvents();
-	  }
-	  RadioSelect.prototype={
-	  	initEvents:function(){
-	  		var obj=this;
-	  		obj.options.on('change',function(){
-	  			var opt=$(this);
-	  			obj.val = opt.attr("value");
-	  			// console.log(obj.getValue());
-	  		});
-	  	},
-	  	getValue:function(){
-	  		return this.val;
-	  	}
-	  };
-
-	  $(document).ready(function() {
-	    var mydropdown = new CustomDropDown($("#dropdown1"));
-	    var myradio=new RadioSelect($("#radioselect"));
-
-	    //搜索按钮点击
-	    $('#submit').click(function() {
-	    	var url='/search/r';
-	    	var searchType=mydropdown.getValue();
-	    	var bookType=myradio.getValue();
-	    	var content=$('#content').val();
-	    	if (content==''){
-	    		alert('请输入搜索内容...');
-	    	}else{
-	    		url=url+"?sType="+searchType+"&bType="+bookType+"&content="+content;
-	    		//跳转结果页 GET
-	    		document.location.href=url;
-	    	}
-	    });
-	  });
-
-	  //借书请求
-	  $(document).ready(function(){
-			$('#borrow').click(function(){
-				var barcode=$("#barcode").text();
-				if(barcode==""){
-					barcode=$("#barcode").val();
-				}
-				var url="/borrow";
-				$.StandardPost(url,{
-					barcode:barcode
-				});
-			});
-	  });
-
-	  //预约请求
-	  $(document).ready(function(){
-	  	$('#order').click(function(){
-	  		var isbn=$('#isbn').val();
-	  		alert(isbn);
-	  		var url="/order";
-	  		$.StandardPost(url,{
-	  			isbn:isbn
-	  		});
-	  	});
-	  });
-
-	  //续借请求
-	  $(document).ready(function(){
-	  	$(".renew").each(function(index){
-	  		$(".renew").eq(index).click(function(){
-	  			var url="/mylib/renew";
-	  			var barcode=$(".barcode").eq(index).text();
-	  			$.StandardPost(url,{
-		  			barcode:barcode
-		  		});
-	  		});
-	  	});
-	  });
-
-	  //还书请求
-    $(document).ready(function(){
-    	$(".return").each(function(index){
-    		$(".return").eq(index).click(function(){
-    			var url="/mylib/return";
-    			var barcode=$(".barcode").eq(index).text();
-    			$.StandardPost(url,{
-  	  			barcode:barcode
-  	  		});
-    		});
-    	});
-    });
-
-    //取消预约
-    $(document).ready(function(){
-    	$(".cancel").each(function(index){
-    		$(this).eq(index).click(function(){
-    			var url="/mylib/cancel";
-    			var isbn=$(this).val();
-    			$.StandardPost(url,{
-  	  			isbn:isbn
-  	  		});
-    		});
-    	});
-    });
-	  
-	  //构建post请求
-	  $.extend({
-	  	StandardPost:function(url,args){
-	  		var form=$("<form method='post'></form>");
-	  		var input;
-	  		form.attr({"action":url});
-	  		$.each(args,function(key,value){
-	  			input = $("<input type='hidden'>");
-	            input.attr({"name":key});
-	            input.val(value);
-	            form.append(input);
-	  		});
-	  		form.appendTo(document.body);
-        	form.submit();
-        	document.body.removeChild(form[0]);
-	  	}
-	  });
-	</script>
 </body>
 </html>
