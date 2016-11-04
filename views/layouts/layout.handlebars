@@ -10,7 +10,7 @@
 	<!-- 通过handlebars的helper来实现css和js资源的加载。这种方式的优点是可以在需要资源的页面才加载所需的资源。可以参考这篇博客：http://www.cnblogs.com/qieguo/p/5811988.html -->
   {{css "/stylesheets/style.css"}}
   {{#each cssList}}
- 	 	<link rel='stylesheet' href={{this}} />
+ 	 	<link rel='stylesheet' href="{{this}}" />
   {{/each}}
 
   <!-- 其实小项目是没必要像上面这么写，直接用下面的语句引用css资源就好了。我只是为了示范下handlebars的helper更高级的用法而已。-->
@@ -71,13 +71,12 @@
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 	<!-- <script src="http://v3.bootcss.com/assets/js/docs.min.js"></script> -->
-	
-	<!-- 参考上面css -->
-	{{js "javascripts/search.js"}}
-	{{js "javascripts/mylib.js"}}
+
+	<!-- 同上面css的写法。只用需要的页面写{{js '...'}}语句，这里为了偷懒，就都写在layout公共布局文件中了-->
+	{{js "/javascripts/search.js"}}
+	{{js "/javascripts/mylib.js"}}
 	{{#each jsList}}
  	 	<script src={{this}}></script>
   {{/each}}
-
 </body>
 </html>

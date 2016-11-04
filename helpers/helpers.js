@@ -24,4 +24,5 @@ exports.js = function(str, option) {
 		}
 	});
 	this.jsList = jsList.concat();
+	console.log(jsList);
 };
