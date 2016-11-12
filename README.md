@@ -1,6 +1,6 @@
 Libsystem
 ===
-使用`Express+Mysql`搭建的图书馆流通管理系统
+使用Express+Mysql搭建的图书馆流通管理系统
 ---
 
 ### 技术栈
