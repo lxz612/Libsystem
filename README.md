@@ -35,6 +35,23 @@ Libsystem
  ```
  npm start
  ```
+### 运行截图
+1.首页
+![icon](/Capture/1.jpg "")
+2.搜索页
+![icon](/Capture/2.JPG "")
+3.书目信息页
+![icon](/Capture/3.jpg "")
+4.借阅
+![icon](/Capture/4.jpg "")
+5.登录
+![icon](/Capture/5.jpg "")
+6.当前借阅
+![icon](/Capture/6.jpg "")
+7.借阅历史
+![icon](/Capture/7.jpg "")
+8.个人信息
+![icon](/Capture/8.jpg "")
  
 ### License
   MIT
