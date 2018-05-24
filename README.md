@@ -31,7 +31,7 @@ Libsystem
 
 2. 启动Mysql服务
 
-3. 启动node（http://localhost:3000）
+3. 启动node（http://localhost:8080）
  ```
  npm start
  ```
